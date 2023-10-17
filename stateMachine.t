@@ -12,3 +12,7 @@ stateMachineModuleID: ModuleID {
         version = '1.0'
         listingOrder = 99
 }
+
+class StateMachine: RuleEngineObject
+	syslogID = 'StateMachine'
+;
