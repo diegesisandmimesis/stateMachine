@@ -13,66 +13,6 @@ class State: RuleUser
 
 	toState = nil
 
-/*
-	// Table to hold our rulebooks when we're not the current state.
-	// They get moved out of our "normal" rulebook table so they're
-	// not checked if we're not the current state.
-	fsmRulebook = perInstance(new LookupTable())
-
-	// Disable all our rulebooks.  Called when we stop being the current
-	// state.
-	disableStateRulebooks() {
-		rulebook.keysToList.forEach(function(id) {
-			disableStateRulebookByID(id);
-		});
-	}
-
-	// Enable all our rulebooks.  Called when we start being the current
-	// state.
-	enableStateRulebooks() {
-		fsmRulebook.keysToList.forEach(function(id) {
-			enableStateRulebookByID(id);
-		});
-	}
-
-	// Disable the rulebook with the given ID.
-	disableStateRulebookByID(id) {
-		local obj;
-
-		if((obj = rulebook[id]) == nil)
-			return(nil);
-
-		return(disableStateRulebook(obj));
-	}
-
-	// Enable the rulebook with the given ID.
-	enableStateRulebookByID(id) {
-		local obj;
-
-		if((obj = fsmRulebook[id]) == nil)
-			return(nil);
-
-		return(enableStateRulebook(obj));
-	}
-
-	// Disable the given rulebook.
-	disableStateRulebook(obj) {
-		if((obj == nil) || !obj.ofKind(Transition))
-			return(nil);
-		fsmRulebook[obj.id] = obj;
-		return(removeRulebook(obj));
-	}
-	
-	// Enable the given rulebook.
-	enableStateRulebook(obj) {
-		if((obj == nil) || !obj.ofKind(Transition))
-			return(nil);
-		fsmRulebook.removeElement(obj);
-
-		return(addRulebook(obj));
-	}
-*/
-
 	// State transition.  We're the old state and the arg is the
 	// ID of the new state.
 	stateTransition(id) {
@@ -130,6 +70,7 @@ class State: RuleUser
 	// Called by our state machine during a state transition where
 	// we were the current state but aren't anymore.
 	_stateEnd() {
+		disable();
 		disableAllRulebooks();
 		stateEnd();
 	}
@@ -137,6 +78,7 @@ class State: RuleUser
 	// Called by our state machine during a state transition when we
 	// become the current state.
 	_stateStart() {
+		enable();
 		enableAllRulebooks();
 		stateStart();
 	}

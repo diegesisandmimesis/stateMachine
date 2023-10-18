@@ -128,10 +128,13 @@ class StateMachine: RuleEngineObject
 		if(fsmState[obj.id] != nil)
 			return(nil);
 		fsmState[obj.id] = obj;
-		if(obj.id == stateID)
+		if(obj.id == stateID) {
 			obj.enableAllRulebooks();
-		else
+			obj.enable();
+		} else {
 			obj.disableAllRulebooks();
+			obj.disable();
+		}
 
 		return(true);
 	}
@@ -144,6 +147,7 @@ class StateMachine: RuleEngineObject
 			return(nil);
 		fsmState.removeElement(obj);
 		obj.disableAllRulebooks();
+		obj.disable();
 		return(true);
 	}
 
