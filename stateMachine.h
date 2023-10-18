@@ -14,4 +14,6 @@
 #error "ruleEngine should be in /home/user/tads/ruleEngine ."
 #endif // RULE_ENGINE_H
 
+State template 'id';
+
 #define STATE_MACHINE_H
