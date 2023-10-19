@@ -97,11 +97,11 @@ class StateMachine: RuleEngineObject
 			return(nil);
 		fsmState[obj.id] = obj;
 		if(obj.id == stateID) {
-			obj.enableAllRulebooks();
-			obj.enable();
+			//obj.enableAllRulebooks();
+			obj.enableRuleUser();
 		} else {
-			obj.disableAllRulebooks();
-			obj.disable();
+			//obj.disableAllRulebooks();
+			obj.disableRuleUser();
 		}
 
 		return(true);

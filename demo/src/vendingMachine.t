@@ -43,6 +43,7 @@ gameMain: GameMainDef
 	initialPlayerChar = me
 	newGame() {
 		syslog.enable('ruleEngineMatches');
+		syslog.enable('RuleEngine');
 		showIntro();
 		runGame(true);
 	}

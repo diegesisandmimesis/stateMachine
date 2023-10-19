@@ -70,16 +70,16 @@ class State: RuleUser
 	// Called by our state machine during a state transition where
 	// we were the current state but aren't anymore.
 	_stateEnd() {
-		disable();
-		disableAllRulebooks();
+		disableRuleUser();
+		//disableAllRulebooks();
 		stateEnd();
 	}
 
 	// Called by our state machine during a state transition when we
 	// become the current state.
 	_stateStart() {
-		enable();
-		enableAllRulebooks();
+		enableRuleUser();
+		//enableAllRulebooks();
 		stateStart();
 	}
 
