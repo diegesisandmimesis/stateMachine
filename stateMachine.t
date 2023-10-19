@@ -69,6 +69,8 @@
 #include <adv3.h>
 #include <en_us.h>
 
+#include "stateMachine.h"
+
 // Module ID for the library
 stateMachineModuleID: ModuleID {
         name = 'State Machine Library'
