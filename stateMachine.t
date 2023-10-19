@@ -66,41 +66,6 @@
 //	ID.
 //
 //
-//	Here's an example of a state machine with multiple transitions in
-//	one of its states:
-//
-//		StateMachine
-//			stateID = 'default'	// ID of the starting state
-//
-//			// Display a message when the state resets
-//			stateTransitionAction(id) {
-//				if(id == 'default')
-//					"<.p>The state machine resets. ";
-//			}
-//		;
-//
-//		+State 'default';
-//		++Transition toState = 'pebbleDropped';
-//		+++Trigger dstObject = pebble action = DropAction;
-//
-//		+State 'pebbleDropped';
-//
-//		// The first transition, if the pebble is dropped a second
-//		// time.  It resets the state machine.
-//		++Transition toState = 'default';
-//		+++Trigger dstObject = pebble action = DropAction;
-//
-//		// The second transition, if the rock is dropped after the
-//		// pebble.  It advances the machine to its final state.
-//		++Transition toState = 'done';
-//		+++Trigger dstObject = rock action = DropAction;
-//
-//		+State 'done' stateStart() { "<.p>Reached the final state. "; };
-//
-//	This works the same as the first example unless you pick up the pebble
-//	and drop it again before dropping the rock, in which case the
-//	state is reset.
-//
 #include <adv3.h>
 #include <en_us.h>
 
@@ -117,6 +82,9 @@ class StateMachine: RuleEngineObject
 
 	// The ID of the current state.
 	stateID = nil
+
+	_nextStateID = nil
+	_nextState = nil
 
 	// Hash table of our states, keyed by their IDs.
 	fsmState = perInstance(new LookupTable())
@@ -164,12 +132,14 @@ class StateMachine: RuleEngineObject
 	// Called during a state transition.  Argument is the new state.
 	setState(obj) {
 		if((obj == nil) || !obj.ofKind(State)) {
-			stateID = nil;
+			_nextState = nil;
+			_nextStateID = nil;
 			return(nil);
 		}
 
-		obj._stateStart();
-		stateID = obj.id;
+		// Remember the new state.
+		_nextState = obj;
+		_nextStateID = obj.id;
 
 		return(true);
 	}
@@ -190,13 +160,44 @@ class StateMachine: RuleEngineObject
 		if(setState(fsmState[newStateID]) != true)
 			return(nil);
 
-		// Do anything we want to do when the state changes.
-		stateTransitionAction(newStateID);
-
 		return(true);
 
 	}
 
+	// Method called by the RuleEngine near the end of
+	// turn processing.
+	// We do this juggling so that we don't have to worry about
+	// state transitions firing multiple times per turn (pushing
+	// a button triggers a state change, the new state has
+	// a rule for checking if the button is being pushed, which triggers
+	// a transition back to the original state...which has a rule
+	// for the checking if the button is being pushed...).
+	handleStateTransition() {
+		// Make sure the state's changing.
+		if((_nextStateID == stateID) ||( _nextState == nil))
+			return;
+		
+		// Call the state's stateStart() method.
+		_nextState._stateStart();
+		_nextState = nil;
+
+		// Actually set the state.
+		stateID = _nextStateID;
+
+		// Do whatever we're supposed to do on a state change.
+		stateTransitionAction(stateID);
+	}
+
 	// For instances' state transition actions.
 	stateTransitionAction(id) {}
+;
+
+
+modify RuleEngine
+	updateRuleEngine() {
+		inherited();
+		forEachInstance(StateMachine, function(o) {
+			o.handleStateTransition();
+		});
+	}
 ;
