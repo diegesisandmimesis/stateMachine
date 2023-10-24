@@ -66,6 +66,64 @@
 //	ID.
 //
 //
+// STATE METHODS
+//
+//	The State class provides:
+//
+//		stateStart()
+//			Called without arguments when the given state
+//			instance becomes the current state.
+//
+//		stateEnd()
+//			Called without arguments on the current state
+//			immediately before a different state becomes current
+//
+//	Note that these methods will be called during a state transition,
+//	and state transitions occur late in the turn, after action
+//	resolution.
+//
+//	In order to interrupt action resolution, the transitionAction()
+//	method on the state transition should be used.
+//
+//
+// TRANSITION METHODS
+//
+//	The Transition class provides:
+//
+//		transitionAction()
+//			If defined, this method will be called without
+//			arguments during action resolution, in the
+//			beforeAction() window.
+//
+//			WHATEVER IS DEFINED IN THIS METHOD WILL REPLACE
+//			THE CURRENT ACTION and action resolution will
+//			be terminated (via exit) immediately after the
+//			method is called.
+//
+//		beforeTransition()
+//			Called without arguments before a state change.
+//
+//		afterTransition()
+//			Called without arguments after a state change,
+//			specifically after the old state is ended and
+//			before the new state is started.
+//
+//
+//	DETAILED LIFECYCLE
+//
+//		During a state change, methods are called on the
+//		current state instance and the Transition instance
+//		causing the state change:
+//
+//			Transition.beforeTransition()
+//			State.stateEnd()
+//			Transition.afterTransition()
+//
+//		Then, the new state's stateStart() method is called:
+//
+//			State.stateStart()
+//
+//
 #include <adv3.h>
 #include <en_us.h>
 
