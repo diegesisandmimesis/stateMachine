@@ -79,6 +79,8 @@ stateMachineModuleID: ModuleID {
         listingOrder = 99
 }
 
+enum stateMachineBefore, stateMachineAfter;
+
 class StateMachine: RuleEngineObject
 	syslogID = 'StateMachine'
 
@@ -91,13 +93,16 @@ class StateMachine: RuleEngineObject
 	// Hash table of our states, keyed by their IDs.
 	fsmState = perInstance(new LookupTable())
 
-	// Add a State.
+	// Add a state to this state machine.
 	addState(obj) {
 		if((obj == nil) || !obj.ofKind(State))
 			return(nil);
+
 		if(fsmState[obj.id] != nil)
 			return(nil);
+
 		fsmState[obj.id] = obj;
+
 		if(obj.id == stateID) {
 			obj.enableRuleUser();
 		} else {
@@ -107,84 +112,85 @@ class StateMachine: RuleEngineObject
 		return(true);
 	}
 
-	// Remove a state.
+	// Remove a state from this state machine.
 	removeState(obj) {
 		if((obj == nil) || !obj.ofKind(State))
 			return(nil);
+
 		if(fsmState[obj.id] == nil)
 			return(nil);
+
 		fsmState.removeElement(obj);
 		obj.disableAllRulebooks();
 		obj.disable();
-		return(true);
-	}
-
-	// Called during a state transition.  Argument is the old state.
-	clearState(obj) {
-		if((obj == nil) || !obj.ofKind(State))
-			return(nil);
-
-		obj._stateEnd();
 
 		return(true);
 	}
 
-	// Called during a state transition.  Argument is the new state.
-	setState(obj) {
-		if((obj == nil) || !obj.ofKind(State)) {
-			_nextState = nil;
+	// Queue a state transition.
+	// This is usually called from StateMachineState.queueStateTransition(),
+	// in turn from StateMachineState.rulebookMatchCallback().  That is,
+	// we're called by a state when that state notices that one of its
+	// rulebooks matched, leading it to request a state change.
+	// The first arg is the old state (a State instance) and the second
+	// is the ID of the new state (a string literal).
+	//
+	// We queue the change instead of handling it immediately to prevent
+	// multiple state changes in a single turn.
+	queueStateTransition(oldState, newStateID) {
+		_debug('queueStateTransition:
+			<<(oldState ? oldState.id : 'nil')>>
+			to <<newStateID>>');
+
+		// Make sure the new state ID is valid.
+		if(fsmState[newStateID] == nil) {
 			_nextStateID = nil;
 			return(nil);
 		}
 
-		// Remember the new state.
-		_nextState = obj;
-		_nextStateID = obj.id;
+		// Remember the new state ID.
+		_nextStateID = newStateID;
 
-		return(true);
-	}
-
-	// Handle a state transition.
-	// Usually called from a state object, when that state notices one
-	// of its transition conditions is met.
-	// First arg is the State instance of the old state, second arg
-	// is the ID of the new state.
-	stateTransition(oldState, newStateID) {
-		_debug('stateTransition:  <<(oldState ? oldState.id : 'nil')>>
-			to <<newStateID>>');
-
-		// Clear the old state.
-		clearState(oldState);
-
-		// Set the new state.
-		if(setState(fsmState[newStateID]) != true)
-			return(nil);
+		// Let the rule engine know we want to be pinged later
+		// in the turn.
+		gRuleEngine.addStateTransition(self);
 
 		return(true);
 
 	}
 
-	// Method called by the RuleEngine near the end of
-	// turn processing.
-	// We do this juggling so that we don't have to worry about
-	// state transitions firing multiple times per turn (pushing
-	// a button triggers a state change, the new state has
-	// a rule for checking if the button is being pushed, which triggers
-	// a transition back to the original state...which has a rule
-	// for the checking if the button is being pushed...).
-	handleStateTransition() {
+	// Called by RuleEngine after action resolution, during the
+	// window when daemons are polled.
+	// This only gets called if we rand queueStateTransition() (above)
+	// earlier in the turn (during action resolution, usually).
+	stateTransition() {
+		local obj;
+
 		// Make sure the state's changing.
-		if((_nextStateID == stateID) ||( _nextState == nil))
+		if(_nextStateID == stateID)
 			return;
-		
-		// Call the state's stateStart() method.
-		_nextState._stateStart();
-		_nextState = nil;
 
-		// Actually set the state.
+		_debug('handling state transition:
+			<<toString(stateID)>> to
+			<<toString(_nextStateID)>>');
+
+		// End the current state, if it's not nil
+		if((obj = fsmState[stateID]) != nil)
+			obj._stateEnd();
+
+		// Set the new state ID and clear queued one.
 		stateID = _nextStateID;
+		_nextStateID = nil;
 
-		// Do whatever we're supposed to do on a state change.
+		// If the new state is a bogus ID something very
+		// silly has happened and we bail.
+		if((obj = fsmState[stateID]) == nil)
+			return;
+
+		// New state transition notifications for the new state.
+		obj._stateStart();
+
+		// Do state-machine-level transition stuff.
 		stateTransitionAction(stateID);
 	}
 
@@ -192,12 +198,20 @@ class StateMachine: RuleEngineObject
 	stateTransitionAction(id) {}
 ;
 
-
 modify RuleEngine
+	stateTransition = perInstance(new Vector())
+
+	addStateTransition(obj) {
+		if((obj == nil) || !obj.ofKind(StateMachine))
+			return(nil);
+		stateTransition.append(obj);
+		return(true);
+	}
 	updateRuleEngine() {
 		inherited();
-		forEachInstance(StateMachine, function(o) {
-			o.handleStateTransition();
+		stateTransition.forEach(function(o) {
+			o.stateTransition();
 		});
+		stateTransition.setLength(0);
 	}
 ;

@@ -130,15 +130,14 @@ vendingMachineState: StateMachine
 	// This is the state we switch to if the transition's rules match.
 	toState = 'paid'
 
-	// Stuff to do after the transition.
-	// In this case we display an informational message, move the coin
-	// out of the slot it just got put in.  The transition bookkeeping
-	// takes care of itself so we don't have to do anything for it here.
-	afterTransition() {
-		"The coin clatters down into the machine\'s
+	// The action for the transition.  This will replace any turn
+	// action.
+	// We display a message and take care of moving the coin (which
+	// will be gDobj, per our trigger rules below).
+	transitionAction() {
+		"The coin clatters down into the machine's
 			innards and the button lights up. ";
 		gDobj.moveInto(nil);
-		exit;
 	}
 ;
 // The transition's trigger is >PUT COIN IN SLOT
@@ -155,18 +154,9 @@ vendingMachineState: StateMachine
 // the one in the "paid" state, and so the only thing that keeps them both
 // from firing every time the button is pressed is the state juggling.
 ++NoTransition 'haventPaid'
-	// Here we call beforeTransition() instead of afterTransition(), but
-	// it's mostly just to illustrate that we can.  Since we're calling
-	// exit it doesn't really matter.
-	// We call exit to suppress the normal failure message "Pushing the
-	// button has no effect" because the button is a Fixture and we're
-	// not doing anything else anywhere to handle the action (as we
-	// would in a "real" game instead of a demo designed to illustrate
-	// how we can do everything with a StateMachine).
-	beforeTransition() {
+	transitionAction() {
 		reportFailure('When {you/he} push{es} the button, it
 			briefly lights up red.  No pebble is dispensed. ');
-		exit;
 	}
 ;
 // The NoTransition's trigger is >PUSH BUTTON
@@ -181,7 +171,10 @@ vendingMachineState: StateMachine
 	// After we dispense a pebble, we return to the default state.
 	toState = 'default'
 
-	afterTransition() {
+	// The action for the transition when the vending machine dispenses
+	// a pebble.
+	// We display a message and move a pebble into the room.
+	transitionAction() {
 		local obj;
 
 		defaultReport('The vending machine emits a loud
@@ -189,8 +182,6 @@ vendingMachineState: StateMachine
 
 		obj = Pebble.createInstance();
 		obj.moveInto(machine.getOutermostRoom());
-
-		exit;
 	}
 ;
 // The trigger is >PUSH BUTTON
@@ -202,18 +193,11 @@ vendingMachineState: StateMachine
 // We add another "no transition" transition, this one handling when
 // the player inserts multiple coins without pressing the button.
 ++NoTransition 'coinReturn'
-	// Once again what we're doing here is replacing the current
-	// turn's action, so we finish by calling exit.  If we DIDN'T
-	// do this, then the coin would end up in the slot at the
-	// end of the turn.  Because that's Thing.dobjFor(PutIn) would do.
-	// We could probably better handle this in Coin.dobjFor(PutIn),
-	// but we're trying to do EVERYTHING with the state machine here.
-	afterTransition() {
+	transitionAction() {
 		"The coin disappears into the slot, and then, after
 			some brief clattering from the machine, it is
 			spit back out. ";
 		gDobj.moveInto(machine.getOutermostRoom());
-		exit;
 	}
 ;
 +++Trigger

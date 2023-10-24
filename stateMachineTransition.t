@@ -14,14 +14,37 @@ class Transition: Rulebook
 	// Wrap the normal Rulebook.callback() in our before and after
 	// methods.
 	callback() {
+		// Make sure we're notified after the transition.
+		queueTransition();
+
+		// Do any before transition stuff.
 		beforeTransition();
+
+		// Do any default callback stuff.
 		inherited();
-		afterTransition();
+
+		// Check to see if we have a non-null transitionAction()
+		// defined.
+		// If so, we treat it like a replacement action:  we
+		// do it, and then stop processing the action.
+		if(propDefined(&transitionAction)
+			&& (propType(&transitionAction) != TypeNil)) {
+			transitionAction();
+			exit;
+		}
+	}
+
+	// Try to notify the state we're part of that we want to be
+	// notified after the state transition.
+	queueTransition() {
+		if(owner == nil) return;
+		owner.queueTransition(self);
 	}
 
 	// Stub methods.
 	beforeTransition() {}
 	afterTransition() {}
+	transitionAction = nil
 ;
 
 // Transitions are just rulebooks, so we shadow all the stock
