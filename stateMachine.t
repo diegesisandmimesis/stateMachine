@@ -48,7 +48,7 @@
 //		;
 //
 //	This StateMachine starts in state "foo".  If the pebble is dropped
-//	while the machine is in state "foo', the state will become "bar".
+//	while the machine is in state "foo", the state will become "bar".
 //	If the rock is dropped while in state "bar", the state will become
 //	"baz".  If the rock is dropped while the machine is in state "foo",
 //	nothing will happen (to the state machine;  the pebble will be
