@@ -255,21 +255,3 @@ class StateMachine: RuleEngineObject
 	// For instances' state transition actions.
 	stateTransitionAction(id) {}
 ;
-
-modify RuleEngine
-	stateTransition = perInstance(new Vector())
-
-	addStateTransition(obj) {
-		if((obj == nil) || !obj.ofKind(StateMachine))
-			return(nil);
-		stateTransition.append(obj);
-		return(true);
-	}
-	updateRuleEngine() {
-		inherited();
-		stateTransition.forEach(function(o) {
-			o.stateTransition();
-		});
-		stateTransition.setLength(0);
-	}
-;
