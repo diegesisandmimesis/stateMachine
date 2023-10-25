@@ -161,6 +161,8 @@ class StateMachine: RuleEngineObject
 
 		fsmState[obj.id] = obj;
 
+		obj.owner = self;
+
 		if(obj.id == stateID) {
 			obj.enableRuleUser();
 		} else {
