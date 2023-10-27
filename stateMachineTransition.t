@@ -47,6 +47,8 @@ class Transition: Rulebook
 	beforeTransition() {}
 	afterTransition() {}
 	transitionAction = nil
+
+	debugStateMachineTransition() {}
 ;
 
 // Transitions are just rulebooks, so we shadow all the stock

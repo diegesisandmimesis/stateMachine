@@ -116,4 +116,6 @@ class State: RuleUser
 	// Called when a state is set and cleared, respectively.
 	stateStart() {}
 	stateEnd() {}
+
+	debugStateMachineState() {}
 ;

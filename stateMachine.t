@@ -248,4 +248,6 @@ class StateMachine: RuleEngineObject
 
 	// For instances' state transition actions.
 	stateTransitionAction(id) {}
+
+	debugStateMachine() {}
 ;

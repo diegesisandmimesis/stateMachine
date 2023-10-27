@@ -44,6 +44,7 @@ gameMain: GameMainDef
 	newGame() {
 		//syslog.enable('RuleEngine');
 		showIntro();
+		//toasterState.debugStateMachine();
 		runGame(true);
 	}
 	showIntro() {

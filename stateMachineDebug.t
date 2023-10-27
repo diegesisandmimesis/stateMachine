@@ -33,6 +33,50 @@ modify StateMachine
                         <<toString(_nextStateID)>>', 'transition');
 		inherited();
 	}
+
+	debugStateMachine() {
+		local l;
+
+		_debug('State Machine Debugging Data:');
+		_debug('stateID = <<toString(stateID)>>');
+
+		l = fsmState.keysToList();
+		_debug('number of states = <<toString(l.length)>>');
+		l.forEach(function(o) {
+			_debug('state <<toString(o)>>:');
+			fsmState[o].debugStateMachineState();
+		});
+	}
+;
+
+modify State
+	debugStateMachineState() {
+		local l;
+
+		l = rulebook.keysToList();
+		_debug('\tnumber of enabled transitions =
+			<<toString(l.length)>>');
+		l.forEach(function(o) {
+			_debug('\t\ttransition <<toString(o)>>:');
+			rulebook[o].debugStateMachineTransition();
+		});
+		l = disabledRulebook.keysToList();
+		_debug('\tnumber of disabled transitions =
+			<<toString(l.length)>>');
+		l.forEach(function(o) {
+			_debug('\t\ttransition <<toString(o)>>:');
+			disabledRulebook[o].debugStateMachineTransition();
+		});
+	}
+;
+
+modify Transition
+	debugStateMachineTransition() {
+		_debug('\t\t\tnumber of rules: <<toString(ruleList.length)>>');
+		ruleList.forEach(function(o) {
+			_debug('\t\t\t\t<<toString(o)>>');
+		});
+	}
 ;
 
 #endif // SYSLOG
