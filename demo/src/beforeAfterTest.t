@@ -1,6 +1,6 @@
 #charset "us-ascii"
 //
-// basicTest.t
+// beforeAfterTest.t
 // Version 1.0
 // Copyright 2022 Diegesis & Mimesis
 //
@@ -8,7 +8,7 @@
 //
 // It can be compiled via the included makefile with
 //
-//	# t3make -f basicTest.t3m
+//	# t3make -f beforeAfterTest.t3m
 //
 // ...or the equivalent, depending on what TADS development environment
 // you're using.
@@ -47,9 +47,18 @@ gameMain: GameMainDef
 		runGame(true);
 	}
 	showIntro() {
-		"This demo includes a simple state machine that displays
-		a message when the pebble is dropped and then the rock
-		is dropped (the order matters).
+		"This demo is based on the basicTest demo, with additional
+		output.
+		<.p>
+		Specifically:  each transition will output a message in
+		its beforeTransition() and afterTransition() methods.
+		<.p>
+		The state machine itself just checks for:
+		<.p>
+		\n\t<b>&gt;</b>DROP PEBBLE
+		\n\t<b>&gt;</b>DROP ROCK
+		<.p>
+		...in that order.
 		<.p> ";
 	}
 ;
@@ -59,15 +68,37 @@ startRoom: Room 'Void' "This is a featureless void.";
 ++pebble: Thing 'small round pebble' 'pebble' "A small, round pebble. ";
 ++rock: Thing 'ordinary rock' 'rock' "An ordinary rock. ";
 
+// Modify the State definition to bark during transitions.
+modify State
+	stateStart() { "State <<id>>:  stateStart().\n "; }
+	stateEnd() { "State <<id>>:  stateEnd().\n "; }
+;
+
+// Modify the Transition definition to bark during transitions.
+modify Transition
+	beforeTransition() { "Transition <<id>>:  beforeTransition()\n "; }
+	afterTransition() { "Transition <<id>>:  afterTransition()\n "; }
+	transitionAction() {
+		"Transition <<id>>:  transitionAction()\n ";
+		gDobj.moveInto(gActor.location);
+	}
+;
+
+// We always declare a rule engine.
 myController: RuleEngine;
 
+// State machine with a starting state.
 StateMachine stateID = 'foo';
+
+// First state.  One transition, triggered by >DROP PEBBLE
 +State 'foo';
-++Transition toState = 'bar';
+++Transition 'FooToBar' toState = 'bar';
 +++Trigger dstObject = pebble action = DropAction;
+
+// Second state.  One transition, triggered by >DROP ROCK
 +State 'bar';
-++Transition toState = 'baz';
+++Transition 'BarToBaz' toState = 'baz';
 +++Trigger dstObject = rock action = DropAction;
-+State 'baz' 
-	stateStart() { "<.p>The state is now <q>baz</q>. "; }
-;
+
+// Last state.  No transitions.
++State 'baz';

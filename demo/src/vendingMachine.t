@@ -42,8 +42,7 @@ versionInfo: GameID
 gameMain: GameMainDef
 	initialPlayerChar = me
 	newGame() {
-		syslog.enable('ruleEngineMatches');
-		syslog.enable('RuleEngine');
+		//syslog.enable('transition');
 		showIntro();
 		runGame(true);
 	}

@@ -5,6 +5,8 @@
 #include <adv3.h>
 #include <en_us.h>
 
+#include "stateMachine.h"
+
 // Transitions are specialized Rulebooks.
 class Transition: Rulebook
 	// This defines what state the FSM should move into if this

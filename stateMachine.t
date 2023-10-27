@@ -198,10 +198,6 @@ class StateMachine: RuleEngineObject
 	// We queue the change instead of handling it immediately to prevent
 	// multiple state changes in a single turn.
 	queueStateTransition(oldState, newStateID) {
-		_debug('queueStateTransition:
-			<<(oldState ? oldState.id : 'nil')>>
-			to <<newStateID>>');
-
 		// Make sure the new state ID is valid.
 		if(fsmState[newStateID] == nil) {
 			_nextStateID = nil;
@@ -229,10 +225,6 @@ class StateMachine: RuleEngineObject
 		// Make sure the state's changing.
 		if(_nextStateID == stateID)
 			return;
-
-		_debug('handling state transition:
-			<<toString(stateID)>> to
-			<<toString(_nextStateID)>>');
 
 		// End the current state, if it's not nil
 		if((obj = fsmState[stateID]) != nil)

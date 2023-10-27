@@ -15,5 +15,7 @@
 #endif // RULE_ENGINE_H
 
 State template 'id';
+Transition template 'id' 'toState' "transitionAction"?;
+NoTransition template 'id'? "transitionAction"?;
 
 #define STATE_MACHINE_H

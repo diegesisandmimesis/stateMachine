@@ -5,6 +5,8 @@
 #include <adv3.h>
 #include <en_us.h>
 
+#include "stateMachine.h"
+
 // States, like RuleUsers, are just bundles of Rulebooks.
 // States additionally have a "toState" property, for the ID of the
 // state to transition to if our conditions are satisfied.
