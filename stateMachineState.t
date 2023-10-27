@@ -93,7 +93,6 @@ class State: RuleUser
 	// Call all the subscribers to the transition queue, clearing it
 	// afterwards.
 	notifyQueuedTransitions() {
-"NOTIFY:  <<toString(_transitionQueue.length)>>\n ";
 		_transitionQueue.forEach(function(o) { o.afterTransition(); });
 		_transitionQueue.setLength(0);
 	}
