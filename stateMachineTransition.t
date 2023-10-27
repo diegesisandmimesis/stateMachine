@@ -39,8 +39,8 @@ class Transition: Rulebook
 	// Try to notify the state we're part of that we want to be
 	// notified after the state transition.
 	queueTransition() {
-		if(owner == nil) return;
-		owner.queueTransition(self);
+		if(ruleUser == nil) return;
+		ruleUser.queueTransition(self);
 	}
 
 	// Stub methods.

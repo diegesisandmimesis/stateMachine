@@ -15,7 +15,7 @@ class State: RuleUser
 	id = nil
 
 	// The StateMachine we're part of.
-	owner = nil
+	stateMachine = nil
 
 	// A queue of Transition instances that want to be notified after
 	// the state changes.
@@ -28,7 +28,7 @@ class State: RuleUser
 
 		// If we don't have an owner, we've got nobody to
 		// notify;  fail.
-		if(owner == nil)
+		if(stateMachine == nil)
 			return;
 
 		// Get the rulebook that was triggered or give up.
@@ -40,7 +40,7 @@ class State: RuleUser
 			return;
 
 		// Notify our state machine of the transition.
-		owner.queueStateTransition(self, obj.toState);
+		stateMachine.queueStateTransition(self, obj.toState);
 	}
 
 	// Normal RuleUser method, called when all a rulebook's rules match.
@@ -72,7 +72,7 @@ class State: RuleUser
 		location.addState(self);
 
 		// Remember our state machine.
-		owner = location;
+		stateMachine = location;
 	}
 
 	// Mark a transition instance for notification after the state
@@ -93,6 +93,7 @@ class State: RuleUser
 	// Call all the subscribers to the transition queue, clearing it
 	// afterwards.
 	notifyQueuedTransitions() {
+"NOTIFY:  <<toString(_transitionQueue.length)>>\n ";
 		_transitionQueue.forEach(function(o) { o.afterTransition(); });
 		_transitionQueue.setLength(0);
 	}
