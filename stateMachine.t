@@ -137,7 +137,7 @@ stateMachineModuleID: ModuleID {
         listingOrder = 99
 }
 
-enum stateMachineBefore, stateMachineAfter;
+//enum stateMachineBefore, stateMachineAfter;
 
 class StateMachine: RuleEngineObject
 	syslogID = 'StateMachine'
@@ -150,6 +150,8 @@ class StateMachine: RuleEngineObject
 
 	// Hash table of our states, keyed by their IDs.
 	fsmState = perInstance(new LookupTable())
+
+	getStateByID(id) { return(fsmState[id]); }
 
 	// Add a state to this state machine.
 	addState(obj) {
