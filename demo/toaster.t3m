@@ -9,6 +9,5 @@
 -lib beforeAfter/beforeAfter
 -lib senseGrep/senseGrep
 -lib ruleEngine/ruleEngine
--lib scene/scene
 -lib ../stateMachine
 -source src/toaster.t
