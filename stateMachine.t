@@ -139,7 +139,8 @@ stateMachineModuleID: ModuleID {
 
 //enum stateMachineBefore, stateMachineAfter;
 
-class StateMachine: RuleEngineObject
+//class StateMachine: RuleEngineObject
+class StateMachine: RuleEngine
 	syslogID = 'StateMachine'
 
 	// The ID of the current state.
@@ -147,6 +148,7 @@ class StateMachine: RuleEngineObject
 
 	_nextStateID = nil
 	_nextState = nil
+	_stateTransitionFlag = nil
 
 	// Hash table of our states, keyed by their IDs.
 	fsmState = perInstance(new LookupTable())
@@ -166,9 +168,9 @@ class StateMachine: RuleEngineObject
 		obj.stateMachine = self;
 
 		if(obj.id == stateID) {
-			obj.enableRuleUser();
+			obj.enableRuleSystem();
 		} else {
-			obj.disableRuleUser();
+			obj.disableRuleSystem();
 		}
 
 		return(true);
@@ -211,10 +213,20 @@ class StateMachine: RuleEngineObject
 
 		// Let the rule engine know we want to be pinged later
 		// in the turn.
-		gRuleEngine.addStateTransition(self);
+		//gRuleEngine.addStateTransition(self);
+		//addStateTransition(self);
+		_stateTransitionFlag = true;
 
 		return(true);
 
+	}
+
+	updateRuleEngine() {
+		inherited();
+		if(_stateTransitionFlag == true) {
+			stateTransition();
+			_stateTransitionFlag = nil;
+		}
 	}
 
 	validateStateTransition() {
@@ -229,10 +241,6 @@ class StateMachine: RuleEngineObject
 		local obj;
 
 		// Make sure the state's changing.
-/*
-		if(_nextStateID == stateID)
-			return;
-*/
 		if(validateStateTransition() != true)
 			return;
 

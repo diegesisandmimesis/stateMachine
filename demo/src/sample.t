@@ -59,7 +59,6 @@ startRoom: Room 'Void' "This is a featureless void.";
 ++pebble: Thing 'small round pebble' 'pebble' "A small, round pebble. ";
 ++rock: Thing 'ordinary rock' 'rock' "An ordinary rock. ";
 
-myController: RuleEngine;
 StateMachine
 	stateID = 'default'	// ID of the starting state
 

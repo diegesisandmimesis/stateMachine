@@ -42,7 +42,7 @@ versionInfo: GameID
 gameMain: GameMainDef
 	initialPlayerChar = me
 	newGame() {
-		//syslog.enable('transition');
+		syslog.enable('transition');
 		showIntro();
 		runGame(true);
 	}
@@ -110,9 +110,6 @@ startRoom: Room 'Void'
 +me: Person;
 ++Coin;
 ++Coin;
-
-// We always have to declare a RuleEngine instance when we're using rules.
-myController: RuleEngine;
 
 // The state machine itself.
 vendingMachineState: StateMachine

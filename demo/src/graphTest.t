@@ -100,9 +100,6 @@ class NoBreadInToaster: BreadInToaster
 
 class StartToaster: Trigger dstObject = toaster action = TurnOnAction;
 
-// We always have to declare a RuleEngine instance when we're using rules.
-myRuleEngine: RuleEngine;
-
 // The state machine itself.
 toasterState: StateMachine stateID = 'empty';
 

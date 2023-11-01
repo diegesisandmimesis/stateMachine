@@ -7,10 +7,10 @@
 
 #include "stateMachine.h"
 
-// States, like RuleUsers, are just bundles of Rulebooks.
+// States, like RuleSystem, are just bundles of Rulebooks.
 // States additionally have a "toState" property, for the ID of the
 // state to transition to if our conditions are satisfied.
-class State: RuleUser
+class State: RuleSystem
 	// This state's state ID.
 	id = nil
 
@@ -43,7 +43,7 @@ class State: RuleUser
 		stateMachine.queueStateTransition(self, obj.toState);
 	}
 
-	// Normal RuleUser method, called when all a rulebook's rules match.
+	// Normal RuleSystem method, called when all a rulebook's rules match.
 	// Arg is the rulebook ID.
 	rulebookMatchCallback(id) {
 		// Do whatever we'd normally do.
@@ -54,7 +54,7 @@ class State: RuleUser
 	}
 
 	// Preinit method.
-	initializeRuleUser() {
+	initializeRuleSystem() {
 		// Do whatever we'd normally do.
 		inherited();
 
@@ -100,7 +100,7 @@ class State: RuleUser
 	// Called by our state machine during a state transition where
 	// we were the current state but aren't anymore.
 	_stateEnd() {
-		disableRuleUser();
+		disableRuleSystem();
 		stateEnd();
 		notifyQueuedTransitions();
 	}
@@ -108,7 +108,7 @@ class State: RuleUser
 	// Called by our state machine during a state transition when we
 	// become the current state.
 	_stateStart() {
-		enableRuleUser();
+		enableRuleSystem();
 		stateStart();
 	}
 

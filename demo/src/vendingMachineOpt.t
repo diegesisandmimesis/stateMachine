@@ -101,7 +101,7 @@ class CoinTrigger: Trigger
 class ButtonTrigger: Trigger dstObject = button action = PushAction;
 
 
-myController: RuleEngine;
+//myController: RuleEngine;
 
 vendingMachineState: StateMachine stateID = 'default';
 

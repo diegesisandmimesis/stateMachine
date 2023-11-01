@@ -84,9 +84,6 @@ modify Transition
 	}
 ;
 
-// We always declare a rule engine.
-myController: RuleEngine;
-
 // State machine with a starting state.
 StateMachine stateID = 'foo';
 
