@@ -217,6 +217,10 @@ class StateMachine: RuleEngineObject
 
 	}
 
+	validateStateTransition() {
+		return(_nextStateID != stateID);
+	}
+
 	// Called by RuleEngine after action resolution, during the
 	// window when daemons are polled.
 	// This only gets called if we rand queueStateTransition() (above)
@@ -225,7 +229,11 @@ class StateMachine: RuleEngineObject
 		local obj;
 
 		// Make sure the state's changing.
+/*
 		if(_nextStateID == stateID)
+			return;
+*/
+		if(validateStateTransition() != true)
 			return;
 
 		// End the current state, if it's not nil

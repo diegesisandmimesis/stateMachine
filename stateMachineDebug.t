@@ -20,6 +20,17 @@
 
 #ifdef SYSLOG
 
+DefineSystemAction(DebugStateMachines)
+	execSystemAction() {
+		gDebugStateMachines();
+		defaultReport('Done. ');
+	}
+;
+VerbRule(DebugStateMachines)
+	'debugstatemachines' : DebugStateMachinesAction
+	verbPhrase = 'debug/debugging'
+;
+
 modify StateMachine
 	queueStateTransition(oldState, newStateID) {
 		_debug('queueStateTransition:
