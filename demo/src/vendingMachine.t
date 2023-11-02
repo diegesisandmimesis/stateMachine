@@ -63,7 +63,7 @@ gameMain: GameMainDef
 startRoom: Room 'Void'
 	"This is a featureless void with a vending machine in one corner."
 ;
-+machine: VendingMachine;
++machine: VendingMachine stateMachine = vendingMachineState;
 
 // The player and a slightly infringing zorkmid.
 +me: Person;
