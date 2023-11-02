@@ -40,6 +40,17 @@ versionInfo: GameID
 	}
 ;
 
+modify syslog
+	_flag = static [
+		'rule' -> true,
+		'rulebook' -> true,
+		'rulesystem' -> true,
+		'RuleEngine' -> true,
+		'StateMachine' -> true,
+		'transition' -> true
+	]
+;
+
 gameMain: GameMainDef
 	initialPlayerChar = me
 	newGame() {
@@ -69,11 +80,13 @@ ruleRoom: Room 'Rule Room'
 	The void lies to the south. "
 	south = startRoom
 ;
-//+machine: VendingMachine, StateMachineThing
 +vendingMachineState: VendingMachine, StateMachineThing
-	stateID = 'default'
+	stateMachine = self
 	statefulObject = self
+	stateID = 'default'
 ;
+
+modify vendingMachineState;
 +State 'default';
 ++Transition 'insertCoin'
 	toState = 'paid'
@@ -88,6 +101,7 @@ ruleRoom: Room 'Rule Room'
 	dstObject = statefulObject.slot
 	action = PutInAction
 ;
+
 ++NoTransition 'haventPaid'
 	transitionAction() {
 		reportFailure('When {you/he} push{es} the button, it
@@ -102,7 +116,6 @@ ruleRoom: Room 'Rule Room'
 +State 'paid';
 ++Transition 'dispensing'
 	toState = 'default'
-
 	transitionAction() {
 		local obj;
 

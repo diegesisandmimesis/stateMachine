@@ -67,7 +67,7 @@ class State: RuleSystem
 	// Called at preinit.
 	initializeStateMachineState() {
 		// Make sure we're in a state machine.
-		if((location == nil) || !location.ofKind(StateMachine))
+		if((location == nil) || !location.ofKind(StateMachineBase))
 			return;
 
 		// Tell our state machine to add us.
