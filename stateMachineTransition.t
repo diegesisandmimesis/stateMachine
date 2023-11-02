@@ -13,6 +13,9 @@ class Transition: Rulebook
 	// rulebook matches.
 	toState = nil
 
+	stateMachine = (ruleSystem.stateMachine)
+	statefulObject = (stateMachine.statefulObject)
+
 	// Wrap the normal Rulebook.callback() in our before and after
 	// methods.
 	callback() {
@@ -58,3 +61,8 @@ class TransitionMatchAny: RulebookMatchAny, Transition;
 class TransitionMatchNone: RulebookMatchNone, Transition;
 
 class NoTransition: Transition;
+
+modify Rule
+	stateMachine = (rulebook.stateMachine)
+	statefulObject = (stateMachine.statefulObject)
+;

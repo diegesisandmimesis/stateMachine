@@ -137,9 +137,6 @@ stateMachineModuleID: ModuleID {
         listingOrder = 99
 }
 
-//enum stateMachineBefore, stateMachineAfter;
-
-//class StateMachine: RuleEngineObject
 class StateMachine: RuleEngine
 	syslogID = 'StateMachine'
 
@@ -149,6 +146,10 @@ class StateMachine: RuleEngine
 	_nextStateID = nil
 	_nextState = nil
 	_stateTransitionFlag = nil
+
+	// Optional object reference, for the thing the state machine
+	// is controlling the state of.
+	statefulObject = nil
 
 	// Hash table of our states, keyed by their IDs.
 	fsmState = perInstance(new LookupTable())
@@ -166,6 +167,7 @@ class StateMachine: RuleEngine
 		fsmState[obj.id] = obj;
 
 		obj.stateMachine = self;
+		obj.ruleEngine = self;
 
 		if(obj.id == stateID) {
 			obj.enableRuleSystem();

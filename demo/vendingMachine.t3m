@@ -10,4 +10,6 @@
 -lib senseGrep/senseGrep
 -lib ruleEngine/ruleEngine
 -lib ../stateMachine
+-source src/vendingMachineWorld.t
+-source src/vendingMachineState.t
 -source src/vendingMachine.t

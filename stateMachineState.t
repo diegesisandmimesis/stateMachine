@@ -17,6 +17,8 @@ class State: RuleSystem
 	// The StateMachine we're part of.
 	stateMachine = nil
 
+	statefulObject = (stateMachine.statefulObject)
+
 	// A queue of Transition instances that want to be notified after
 	// the state changes.
 	_transitionQueue = perInstance(new Vector())
