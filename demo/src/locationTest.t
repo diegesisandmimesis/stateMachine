@@ -76,13 +76,14 @@ startRoom: Room 'Void'
 ++Coin;
 ++Coin;
 
-ruleRoom: Room 'Rule Room'
+ruleRoom: RuleSchedulerRoom 'Rule Room'
 	"This is a room with rules.  And a vending machine.
 	<.p>
 	The void lies to the south. "
 	south = startRoom
 ;
-+vendingMachineState: VendingMachine, StateMachineThing
++vendingMachineState: VendingMachine, StateMachine
+	ruleScheduler = ruleRoom
 	stateMachine = self
 	statefulObject = self
 	stateID = 'default'
