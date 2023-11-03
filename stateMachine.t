@@ -137,8 +137,7 @@ stateMachineModuleID: ModuleID {
         listingOrder = 99
 }
 
-//class StateMachine: RuleEngine
-class StateMachineBase: RuleEngineBase
+class StateMachine: RuleEngine
 	syslogID = 'StateMachine'
 
 	// The ID of the current state.
@@ -272,7 +271,3 @@ class StateMachineBase: RuleEngineBase
 
 	debugStateMachine() {}
 ;
-
-class StateMachine: RuleEngine, StateMachineBase;
-class StateMachineRoom: RuleEngineRoom, StateMachineBase;
-class StateMachineThing: RuleEngineThing, StateMachineBase;

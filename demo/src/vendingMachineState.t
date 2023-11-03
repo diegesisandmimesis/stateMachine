@@ -32,8 +32,9 @@ vendingMachineState: StateMachine
 	// We display a message and take care of moving the coin (which
 	// will be gDobj, per our trigger rules below).
 	transitionAction() {
-		"The coin clatters down into the machine's
-			innards and the button lights up. ";
+		"The coin clatters down into <<statefulObject.theNamePossNoun>>
+			innards and <<statefulObject.button.theName>>
+			lights up. ";
 		gDobj.moveInto(nil);
 	}
 ;

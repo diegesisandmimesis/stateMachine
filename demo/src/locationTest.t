@@ -40,6 +40,7 @@ versionInfo: GameID
 	}
 ;
 
+/*
 modify syslog
 	_flag = static [
 		'rule' -> true,
@@ -50,11 +51,12 @@ modify syslog
 		'transition' -> true
 	]
 ;
+*/
 
 gameMain: GameMainDef
 	initialPlayerChar = me
 	newGame() {
-		syslog.enable('transition');
+		//syslog.enable('transition');
 		showIntro();
 		runGame(true);
 	}
