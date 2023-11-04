@@ -11,7 +11,7 @@
 
 stateMachineGraphPreinit: PreinitObject
 	execute() {
-		forEachInstance(StateMachineBase, function(o) {
+		forEachInstance(StateMachine, function(o) {
 			o.initializeStateMachineGraph();
 		});
 	}
