@@ -31,7 +31,7 @@ NoTransition template 'id'? "transitionAction"?;
 
 #ifdef SYSLOG
 #define gDebugStateMachines() { \
-	forEachInstance(StateMachineBase, function(o) { o.debugStateMachine(); }); }
+	forEachInstance(StateMachine, function(o) { o.debugStateMachine(); }); }
 #else // SYSLOG
 #define gDebugStateMachines() {}
 #endif // SYSLOG

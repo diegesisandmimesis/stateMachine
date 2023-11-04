@@ -31,7 +31,7 @@ VerbRule(DebugStateMachines)
 	verbPhrase = 'debug/debugging'
 ;
 
-modify StateMachineBase
+modify StateMachine
 	queueStateTransition(oldState, newStateID) {
 		_debug('queueStateTransition:
 			<<(oldState ? oldState.id : 'nil')>>
