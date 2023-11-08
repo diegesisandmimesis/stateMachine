@@ -8,7 +8,7 @@
 -lib adv3/adv3
 -lib syslog/syslog
 -lib beforeAfter/beforeAfter
--lib senseGrep/senseGrep
+-lib linter/linter
 -lib ruleEngine/ruleEngine
 -lib simpleGraph/simpleGraph
 -lib ../stateMachine

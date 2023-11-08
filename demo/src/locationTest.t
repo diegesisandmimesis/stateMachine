@@ -40,23 +40,9 @@ versionInfo: GameID
 	}
 ;
 
-/*
-modify syslog
-	_flag = static [
-		'rule' -> true,
-		'rulebook' -> true,
-		'rulesystem' -> true,
-		'RuleEngine' -> true,
-		'StateMachine' -> true,
-		'transition' -> true
-	]
-;
-*/
-
 gameMain: GameMainDef
 	initialPlayerChar = me
 	newGame() {
-		//syslog.enable('transition');
 		showIntro();
 		runGame(true);
 	}
@@ -76,7 +62,7 @@ startRoom: Room 'Void'
 ++Coin;
 ++Coin;
 
-ruleRoom: RuleSchedulerRoom 'Rule Room'
+ruleRoom: RuleScheduler, Room 'Rule Room'
 	"This is a room with rules.  And a vending machine.
 	<.p>
 	The void lies to the south. "
