@@ -170,9 +170,9 @@ class StateMachine: RuleEngine
 		obj.ruleEngine = self;
 
 		if(obj.id == stateID) {
-			obj.enableRuleSystem();
+			obj.enableState();
 		} else {
-			obj.disableRuleSystem();
+			obj.disableState();
 		}
 
 		return(true);
@@ -189,6 +189,23 @@ class StateMachine: RuleEngine
 		fsmState.removeElement(obj);
 		obj.disableAllRulebooks();
 		obj.disable();
+
+		return(true);
+	}
+
+	// Set the state.
+	// IMPORTANT:  THIS ALMOST CERTAINLY ISN'T WHAT YOU WANT
+	//	This is a convenience method implemented to assist in
+	//	initial setup.  It is NOT a mechanism for generic state
+	//	transitions--it doesn't handle shutdown of the old state (if
+	//	any) and it doesn't handle startup of the new state.
+	_setState(id) {
+		// Make sure we were passed a valid ID.
+		if((id == nil) || (fsmState[id] == nil))
+			return(nil);
+
+		stateID = id;
+		fsmState[id].enableState();
 
 		return(true);
 	}

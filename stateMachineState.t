@@ -64,8 +64,23 @@ class State: RuleSystem
 		initializeStateMachineState();
 	}
 
+	_tryStateMachine(obj) {
+		if(obj == nil)
+			return(nil);
+		if(!obj.ofKind(StateMachine))
+			return(nil);
+
+		if(obj.addState(self) == true)
+			stateMachine = obj;
+
+		return(true);
+	}
+
 	// Called at preinit.
 	initializeStateMachineState() {
+		if(_tryStateMachine(location) == true)
+			return;
+/*
 		// Make sure we're in a state machine.
 		if((location == nil) || !location.ofKind(StateMachine))
 			return;
@@ -75,6 +90,9 @@ class State: RuleSystem
 
 		// Remember our state machine.
 		stateMachine = location;
+*/
+		if(_tryStateMachine(location.stateMachine) == true)
+			return;
 	}
 
 	// Mark a transition instance for notification after the state
@@ -102,7 +120,7 @@ class State: RuleSystem
 	// Called by our state machine during a state transition where
 	// we were the current state but aren't anymore.
 	_stateEnd() {
-		disableRuleSystem();
+		disableState();
 		stateEnd();
 		notifyQueuedTransitions();
 	}
@@ -110,9 +128,13 @@ class State: RuleSystem
 	// Called by our state machine during a state transition when we
 	// become the current state.
 	_stateStart() {
-		enableRuleSystem();
+		enableState();
 		stateStart();
 	}
+
+	// Pure semantic sugar.
+	enableState() { enableRuleSystem(); }
+	disableState() { disableRuleSystem(); }
 
 	// State transition lifecycle methods.
 	// Called when a state is set and cleared, respectively.
