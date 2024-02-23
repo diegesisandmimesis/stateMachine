@@ -6,6 +6,7 @@
 -lib system
 -lib adv3/adv3
 -lib syslog/syslog
+-lib timestamp/timestamp
 -lib linter/linter
 -lib beforeAfter/beforeAfter
 -lib ruleEngine/ruleEngine
