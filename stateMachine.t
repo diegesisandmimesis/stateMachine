@@ -270,10 +270,6 @@ class StateMachine: RuleEngine
 			obj._stateEnd();
 
 		// Set the new state ID and clear queued one.
-/*
-		stateID = _nextStateID;
-		_nextStateID = nil;
-*/
 		_setState(_nextStateID);
 
 		// If the new state is a bogus ID something very

@@ -80,17 +80,6 @@ class State: RuleSystem
 	initializeStateMachineState() {
 		if(_tryStateMachine(location) == true)
 			return;
-/*
-		// Make sure we're in a state machine.
-		if((location == nil) || !location.ofKind(StateMachine))
-			return;
-
-		// Tell our state machine to add us.
-		location.addState(self);
-
-		// Remember our state machine.
-		stateMachine = location;
-*/
 		if(_tryStateMachine(location.stateMachine) == true)
 			return;
 	}
