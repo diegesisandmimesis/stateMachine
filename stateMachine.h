@@ -26,7 +26,8 @@
 #endif // STATE_MACHINE_GRAPH
 
 State template 'id';
-Transition template 'id' 'toState' "transitionAction"?;
+Transition template 'id' 'toState'? "transitionAction"?;
+Transition template 'id'? 'toState'? "transitionAction"?;
 NoTransition template 'id'? "transitionAction"?;
 
 #ifdef SYSLOG
